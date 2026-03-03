@@ -7,8 +7,15 @@ navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
 });
 
-// Close mobile menu when clicking on a link
+// Close mobile menu when clicking on a link + touch/click highlight
 document.querySelectorAll('.nav-link').forEach(link => {
+    function highlight() {
+        link.classList.add('touch-active');
+        setTimeout(() => link.classList.remove('touch-active'), 300);
+    }
+
+    link.addEventListener('pointerdown', highlight);
+
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
@@ -30,17 +37,51 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar background change on scroll
-window.addEventListener('scroll', () => {
+// Navbar background change on scroll + logo shrink
+(function () {
     const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = 'none';
+    const logoIcon = document.querySelector('.nav-logo-icon');
+    const logoH2 = document.querySelector('.nav-logo h2');
+    if (!logoIcon) return;
+
+    const SMALL = 36;
+
+    function getLarge() {
+        return window.innerWidth <= 768 ? 140 : 180;
     }
-});
+
+    function getScrollEnd() {
+        return window.innerWidth <= 768 ? 180 : 250;
+    }
+
+    function update() {
+        const LARGE = getLarge();
+        const SCROLL_END = getScrollEnd();
+        const t = Math.min(window.scrollY / SCROLL_END, 1);
+        const size = LARGE - (LARGE - SMALL) * t;
+        const shadow = 0.2 - 0.15 * t;
+
+        const yOffset = (1 - t) * (size * 0.35);
+        logoIcon.style.width = size + 'px';
+        logoIcon.style.height = size + 'px';
+        logoIcon.style.boxShadow = `0 4px 20px rgba(0, 0, 0, ${shadow})`;
+        logoIcon.style.transform = `translateY(calc(-50% + ${yOffset}px))`;
+
+        if (logoH2) logoH2.style.marginLeft = (size + 10) + 'px';
+
+        if (window.scrollY > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.boxShadow = 'none';
+        }
+    }
+
+    window.addEventListener('scroll', update);
+    window.addEventListener('resize', update);
+    update(); // set initial state
+})();
 
 // Intersection Observer for fade-in animations
 const observerOptions = {
