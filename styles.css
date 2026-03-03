@@ -39,6 +39,7 @@ body {
     z-index: 1000;
     padding: 1rem 0;
     transition: all 0.3s ease;
+    overflow: visible;
 }
 
 .nav-container {
@@ -50,11 +51,31 @@ body {
     align-items: center;
 }
 
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    position: relative;
+}
+
+.nav-logo-icon {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 1001;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 .nav-logo h2 {
     color: #1a1a1a;
     font-weight: 700;
     font-size: 1.8rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 100px;
 }
 
 .nav-menu {
@@ -110,7 +131,7 @@ body {
     align-items: center;
     background: linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
     color: white;
-    padding: 100px 20px 50px;
+    padding: 200px 20px 50px;
     position: relative;
 }
 
@@ -1222,8 +1243,37 @@ input[aria-owns] + div {
         left: 0;
     }
 
+    .nav-logo-icon {
+        width: 140px;
+        height: 140px;
+    }
+
+    .nav-logo h2 {
+        margin-left: 150px;
+    }
+
+    .hero {
+        padding-top: 110px;
+    }
+
     .nav-toggle {
         display: flex;
+        margin-left: 0.5em;
+    }
+
+    .nav-menu .nav-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-menu .nav-link.touch-active {
+        background-color: var(--bg) !important;
+        color: var(--accent) !important;
+    }
+
+    .nav-menu .nav-link.touch-active::after {
+        width: 0 !important;
     }
 
     .nav-toggle.active .bar:nth-child(2) {
@@ -1311,6 +1361,10 @@ input[aria-owns] + div {
 }
 
 @media (max-width: 480px) {
+    .hero {
+        padding-top: 190px;
+    }
+
     .hero h1 {
         font-size: 2rem;
     }
